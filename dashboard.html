@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Created - AutoEnthusiasts</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .confirmation-message {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-link {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 15px 0;
+            transition: background-color 0.3s;
+        }
+        
+        .dashboard-link:hover {
+            background-color: #2980b9;
+        }
+        
+        .interests-section {
+            margin: 20px 0;
+        }
+        
+        .checkbox-item {
+            margin: 8px 0;
+        }
+        
+        .login-link {
+            display: block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .login-link:hover {
+            text-decoration: underline;
+        }
+        
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to AutoEnthusiasts!</h1>
+    
+    <div class="confirmation-message">
+        Your account has been created successfully. We've sent a confirmation email to <strong>podda@gmail.com</strong>.
+    </div>
+    
+    <hr>
+    
+    <h2>Continue to Your Dashboard</h2>
+    
+    <a href="index.html" class="dashboard-link">Continue to Your Dashboard</a>
+    
+    <hr>
+    
+    <div class="interests-section">
+        <h3>Vehicle Interests (select at least one)</h3>
+        
+        <div class="checkbox-item">
+            <input type="checkbox" id="cars">
+            <label for="cars">Cars</label>
+        </div>
+        
+        <div class="checkbox-item">
+            <input type="checkbox" id="motorcycles" checked>
+            <label for="motorcycles">Motorcycles</label>
+        </div>
+        
+        <div class="checkbox-item">
+            <input type="checkbox" id="trucks">
+            <label for="trucks">Trucks & SUVs</label>
+        </div>
+        
+        <div class="checkbox-item">
+            <input type="checkbox" id="classic">
+            <label for="classic">Classic Vehicles</label>
+        </div>
+        
+        <div class="checkbox-item">
+            <input type="checkbox" id="electric">
+            <label for="electric">Electric Vehicles</label>
+        </div>
+    </div>
+    
+    <div class="checkbox-item">
+        <input type="checkbox" id="terms">
+        <label for="terms">I agree to the Terms and Conditions</label>
+    </div>
+    
+    <div class="checkbox-item">
+        <input type="checkbox" id="create">
+        <label for="create">Create Account</label>
+    </div>
+    
+    <a href="login.html" class="login-link">Already have an account? Login here</a>
+</body>
+</html>
