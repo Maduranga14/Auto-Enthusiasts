@@ -177,8 +177,8 @@ include 'db.php';
                             <span id="usernameDisplay"><?= $_SESSION['username']; ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="dropdownUser">
-                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.php"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="logout.php" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
@@ -254,7 +254,7 @@ include 'db.php';
             
             <!-- Sidebar -->
             <div class="col-md-4">
-                <!-- Recent Threads -->
+                
                  <?php
                     $sqlrecentthreads = "SELECT t.id, t.title, c.name AS category, c.icon, COUNT(r.id)AS reply_count
                                          FROM threads t
@@ -276,7 +276,7 @@ include 'db.php';
                             <?php if ($resultrecentthreads && $resultrecentthreads->num_rows > 0): ?>
                                 <?php while ($thread = $resultrecentthreads->fetch_assoc()): ?>
                                     <li class="list-group-item">
-                                        <a href="thread.html?id=<?= $thread['id'] ?>" class="text-decoration-none d-block mb-1"><?= htmlspecialchars($thread['title']) ?></a>
+                                        <a href="thread.php?id=<?= $thread['id'] ?>" class="text-decoration-none d-block mb-1"><?= htmlspecialchars($thread['title']) ?></a>
                                         <small class="text-muted"><i class="fas <?= htmlspecialchars($thread['icon']) ?> me-1"></i><?= htmlspecialchars($thread['category']) ?> • <?= $thread['reply_count'] ?> Replies</small>
                                     </li>
                                 <?php endwhile; ?>
@@ -352,8 +352,8 @@ include 'db.php';
                     <ul class="list-unstyled footer-links">
                         <li class="mb-2"><a href="login.html" class="text-white">Login</a></li>
                         <li class="mb-2"><a href="register.html" class="text-white">Register</a></li>
-                        <li class="mb-2"><a href="profile.html" class="text-white">My Profile</a></li>
-                        <li><a href="settings.html" class="text-white">Settings</a></li>
+                        <li class="mb-2"><a href="profile.php" class="text-white">My Profile</a></li>
+                        <li><a href="settings.php" class="text-white">Settings</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">
@@ -388,7 +388,6 @@ include 'db.php';
     document.addEventListener('DOMContentLoaded', function () {
         // Show/hide UI based on body class set by PHP
         const isLoggedIn = document.body.classList.contains('logged-in');
-
         const guestButtons = document.getElementById('guestButtons');
         const userDropdown = document.getElementById('userDropdown');
 

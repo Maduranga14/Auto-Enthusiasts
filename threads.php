@@ -238,20 +238,7 @@ $result = $stmt->get_result();
 <body>
     <main class="container my-4">
         <div class="row">
-            <div class="col-lg-8">
-                <!-- Breadcrumb -->
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.php"><i class="fas fa-home me-1"></i>Home</a></li>
-                        <li class="breadcrumb-item"><a href="categories.php"><i class="fas fa-list me-1"></i>Categories</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-car me-1"></i>Cars</li>
-                    </ol>
-                </nav>
-
-
-            <!-- Category Header -->
-            <div class="category-header">
-                <?php
+            <?php
                 $stmtcategory = $conn->prepare("SELECT name, icon FROM categories WHERE category_id = ?");
                 $stmtcategory->bind_param("i",$category_id);
                 $stmtcategory->execute();
@@ -259,6 +246,20 @@ $result = $stmt->get_result();
                 $stmtcategory->fetch();
                 $stmtcategory->close();
                 ?>
+            <div class="col-lg-8">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.php"><i class="fas fa-home me-1"></i>Home</a></li>
+                        <li class="breadcrumb-item"><a href="categories.php"><i class="fas fa-list me-1"></i>Categories</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><i class="fas <?= $category_icon ?> me-1"></i><?= $category_name ?></li>
+                    </ol>
+                </nav>
+
+
+            <!-- Category Header -->
+            <div class="category-header">
+                
                 <div class="d-flex justify-content-between align-items-center">
                     <h2 class="mb-0"><i class="fas <?= $category_icon ?> me-2"></i><?= $category_name ?> Discussion</h2>
                     <button class="btn btn-new-thread btn-primary" data-bs-toggle="modal" data-bs-target="#newThreadModal">
