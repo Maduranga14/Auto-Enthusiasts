@@ -16,6 +16,6 @@ $stmt->bind_param("sssssi",$firstname,$lastname,$username,$email,$interests,$use
 $stmt->execute();
 $_SESSION['username'] = $username;
 
-header("Location: profile.php?update=success");
+header("Location: dashboard.php?update=success");
 exit;
 ?>

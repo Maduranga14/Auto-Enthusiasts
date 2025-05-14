@@ -130,7 +130,7 @@ $interests = explode(",", $user['interests']);
                         <a class="nav-link" href="categories.php">Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="profile.php">Profile</a>
+                        <a class="nav-link" href="dashboard.php">Dashboard</a>
                     </li>
                 </ul>
                 <div class="d-flex">
@@ -251,7 +251,7 @@ $interests = explode(",", $user['interests']);
         document.addEventListener('DOMContentLoaded', function() {
              // Cancel button handler
             document.getElementById('cancelBtn').addEventListener('click', function() {
-                window.location.href = 'profile.php';
+                window.location.href = 'dashboard.php';
             }); 
         });
     </script>

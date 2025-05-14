@@ -152,7 +152,7 @@ $username = $_SESSION['username'];
                         <a class="nav-link" href="categories.php">Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="profile.php">Profile</a>
+                        <a class="nav-link active" href="dashboard.php">Dashboard</a>
                     </li>
                 </ul>
                 <div class="d-flex">
@@ -162,7 +162,7 @@ $username = $_SESSION['username'];
                             <span id="usernameDisplayNav"><?= htmlspecialchars($username) ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="dropdownUser">
-                            <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="dashboard.php"><i class="fas fa-user-circle me-2"></i>Dashboard</a></li>
                             <li><a class="dropdown-item" href="settings.php"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="logout.php" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>

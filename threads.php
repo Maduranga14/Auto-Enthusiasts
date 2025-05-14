@@ -382,40 +382,40 @@ $result = $stmt->get_result();
                 <?php
                 // getting description from category table
                 
-                $stmt = $conn->prepare("SELECT description FROM categories WHERE category_id = ?");
-                $stmt->bind_param("i", $category_id);
-                $stmt->execute();
-                $stmt->bind_result($category_description);
-                $stmt->fetch();
-                $stmt->close();
+                $stmtcat = $conn->prepare("SELECT description FROM categories WHERE category_id = ?");
+                $stmtcat->bind_param("i", $category_id);
+                $stmtcat->execute();
+                $stmtcat->bind_result($category_description);
+                $stmtcat->fetch();
+                $stmtcat->close();
 
                 //getting total threads for that category
-                $stmt = $conn->prepare("SELECT COUNT(*) FROM threads WHERE category_id = ?");
-                $stmt->bind_param("i", $category_id);
-                $stmt->execute();
-                $stmt->bind_result($total_threads);
-                $stmt->fetch();
-                $stmt->close();
+                $stmtthreadcount = $conn->prepare("SELECT COUNT(*) FROM threads WHERE category_id = ?");
+                $stmtthreadcount->bind_param("i", $category_id);
+                $stmtthreadcount->execute();
+                $stmtthreadcount->bind_result($total_threads);
+                $stmtthreadcount->fetch();
+                $stmtthreadcount->close();
 
                 //getting total replies for that category
-                $stmt = $conn->prepare("SELECT COUNT(*) FROM replies WHERE thread_id IN (SELECT id FROM threads WHERE category_id = ?)");
-                $stmt->bind_param("i", $category_id);
-                $stmt->execute();
-                $stmt->bind_result($total_replies);
-                $stmt->fetch();
-                $stmt->close();
+                $stmtreplycount = $conn->prepare("SELECT COUNT(*) FROM replies WHERE thread_id IN (SELECT id FROM threads WHERE category_id = ?)");
+                $stmtreplycount->bind_param("i", $category_id);
+                $stmtreplycount->execute();
+                $stmtreplycount->bind_result($total_replies);
+                $stmtreplycount->fetch();
+                $stmtreplycount->close();
 
                 //getting active memebers count
-                $stmt = $conn->prepare("
+                $stmtmembber = $conn->prepare("
                     SELECT COUNT(DISTINCT user_id)
                     FROM replies
                     WHERE thread_id IN (SELECT id FROM threads WHERE category_id = ?)
                 ");
-                $stmt->bind_param("i", $category_id);
-                $stmt->execute();
-                $stmt->bind_result($active_members);
-                $stmt->fetch();
-                $stmt->close();
+                $stmtmembber->bind_param("i", $category_id);
+                $stmtmembber->execute();
+                $stmtmembber->bind_result($active_members);
+                $stmtmembber->fetch();
+                $stmtmembber->close();
                 ?>
                 <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Category Info</h5>
@@ -442,7 +442,7 @@ $result = $stmt->get_result();
             <!--popular threads-->
             <div class="card mb-4">
                 <?php
-                $stmt = $conn->prepare("
+                $stmtpopularthreads = $conn->prepare("
                     SELECT t.id, t.title, COUNT(r.id) as reply_count
                     FROM threads t
                     LEFT JOIN REPLIES r ON r.thread_id = t.id
@@ -451,10 +451,10 @@ $result = $stmt->get_result();
                     ORDER BY reply_count DESC
                     LIMIT 3
                 ");
-                $stmt->bind_param("i",$category_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $popular_threads = $result->fetch_all(MYSQLI_ASSOC);
+                $stmtpopularthreads->bind_param("i",$category_id);
+                $stmtpopularthreads->execute();
+                $resultpopularthreads = $stmtpopularthreads->get_result();
+                $popular_threads = $resultpopularthreads->fetch_all(MYSQLI_ASSOC);
                 ?>
 
                 <div class="card-header">
@@ -477,7 +477,7 @@ $result = $stmt->get_result();
             <!--top contibutors-->
             <div class="card">
                 <?php
-                $stmt = $conn->prepare("
+                $stmtcontributors = $conn->prepare("
                     SELECT u.id, u.username, u.avatar, COUNT(t.id) as post_count
                     FROM users u
                     LEFT JOIN threads t ON t.user_id = u.id
@@ -485,8 +485,8 @@ $result = $stmt->get_result();
                     ORDER BY post_count DESC
                     LIMIT 3
                     ");
-                $stmt->execute();
-                $top_users = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                $stmtcontributors->execute();
+                $top_users = $stmtcontributors->get_result()->fetch_all(MYSQLI_ASSOC);
                 ?>
                 <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Top Contributors</h5>
@@ -497,7 +497,7 @@ $result = $stmt->get_result();
                     <div class="d-flex align-items-center mb-3">
                         <img src="<?=htmlspecialchars($user['avatar']) ?>" class="rounded-circle me-3" width="40" height="40" alt="Avatar of <?= htmlspecialchars($user['username']) ?>">
                         <div>
-                            <a href="profile.php?id=<?= $user['id'] ?>" class="text-decoration-none"><?= htmlspecialchars($user['username']) ?></a>
+                            <a href="user_profile.php?id=<?= $user['id'] ?>" class="text-decoration-none"><?= htmlspecialchars($user['username']) ?></a>
                             <div class="small text-muted"><?= number_format($user['post_count']) ?> posts</div>
                         </div>
                     </div>

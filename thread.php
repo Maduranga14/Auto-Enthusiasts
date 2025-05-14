@@ -271,9 +271,9 @@ if (isset($_GET['id'])){
                 <!-- Breadcrumb -->
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html"><i class="fas fa-home me-1"></i>Home</a></li>
-                        <li class="breadcrumb-item"><a href="categories.html"><i class="fas fa-list me-1"></i>Categories</a></li>
-                        <li class="breadcrumb-item"><a href="threads.html?category=cars"><i class="fas fa-car me-1"></i>Cars</a></li>
+                        <li class="breadcrumb-item"><a href="index.php"><i class="fas fa-home me-1"></i>Home</a></li>
+                        <li class="breadcrumb-item"><a href="categories.php"><i class="fas fa-list me-1"></i>Categories</a></li>
+                        <li class="breadcrumb-item"><a href="threads.php?category=cars"><i class="fas fa-car me-1"></i>Cars</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Best electric cars 2025</li>
                     </ol>
                 </nav>
