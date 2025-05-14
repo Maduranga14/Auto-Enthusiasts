@@ -299,13 +299,18 @@ $username = $_SESSION['username'];
                                 $recentthread = $resultrecentthread->fetch_assoc();
 
                         ?>
-                        <a href="thread.php?id=<?= $recentreply['thread_id']; ?>" class="list-group-item list-group-item-action">                            
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Replied to: <?= htmlspecialchars($recentreply['title']); ?></h6>
-                                <small><?= date('m/d/Y',strtotime($recentreply['created_at'])); ?></small>
-                            </div>
-                            <p class="mb-1"><?= htmlspecialchars(substr(strip_tags($recentreply['content']), 0, 85)); ?>...</p>
-                        </a>
+                        <?php if ($recentreply): ?>
+                            <a href="thread.php?id=<?= $recentreply['thread_id']; ?>" class="list-group-item list-group-item-action">                            
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Replied to: <?= htmlspecialchars($recentreply['title']); ?></h6>
+                                    <small><?= date('m/d/Y',strtotime($recentreply['created_at'])); ?></small>
+                                </div>
+                                <p class="mb-1"><?= htmlspecialchars(substr(strip_tags($recentreply['content']), 0, 85)); ?>...</p>
+                            </a>
+                        <?php else: ?>
+                            <p class="text-muted list-group-item">No recent replies found.</p>
+                        <?php endif; ?>
+
                         <a href="#" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1">Liked: Motorcycle maintenance tips</h6>
@@ -313,13 +318,17 @@ $username = $_SESSION['username'];
                             </div>
                             <p class="mb-1">Great tips for chain maintenance!</p>
                         </a>
-                        <a href="thread.php?id=<?= $recentthread['id']; ?>" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Created thread:<?= htmlspecialchars($recentthread['title']); ?></h6>
-                                <small><?= date('m/d/Y',strtotime($recentthread['created_at'])); ?></small>
-                            </div>
-                            <p class="mb-1"><?= htmlspecialchars(substr(strip_tags($recentthread['content']), 0, 85)); ?>...</p>
-                        </a>
+                        <?php if ($recentthread): ?>
+                            <a href="thread.php?id=<?= $recentthread['id']; ?>" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Created thread:<?= htmlspecialchars($recentthread['title']); ?></h6>
+                                    <small><?= date('m/d/Y',strtotime($recentthread['created_at'])); ?></small>
+                                </div>
+                                <p class="mb-1"><?= htmlspecialchars(substr(strip_tags($recentthread['content']), 0, 85)); ?>...</p>
+                            </a>
+                        <?php else: ?>
+                            <p class="text-muted list-group-item">No threads created yet.</p>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
