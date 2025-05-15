@@ -1,8 +1,9 @@
 <?php
 session_start();
+header('Content-Type: application/json');
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
 
 include 'db.php';
 
@@ -10,7 +11,8 @@ include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] ==='POST') {
     if(!isset($_SESSION['user_id'])) {
-        die("user must login to post a comment");
+        echo json_encode(['status' => 'error','message'=>'You must logged in to post a reply']);
+        exit;
     }
 
     $user_id = $_SESSION['user_id'];
@@ -18,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST') {
     $content = trim($_POST['content']);
 
     if ($thread_id <= 0) {
-        die("Invalid thread ID.");
+        $error="Invalid thread ID.";
+        echo json_encode(['status' => 'error','message' => 'Invalid thread ID.']);
+        exit;
     }
 
     if (!empty($content)) {
@@ -26,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST') {
         $stmt->bind_param("iis", $thread_id, $user_id, $content);
 
         if($stmt->execute()) {
-            echo "success";
+            echo json_encode(['status' => 'success','message' => 'Reply posted successfully.']);
             exit;
         } else {
-            die("Error inserting reply: " . $stmt->error);
+            echo json_encode(['status' => 'error','message' => 'Database error:' . $stmt->error]);
         }
     } else {
-        echo "Reply content connot be empty.";
+        echo json_encode(['status' => 'error','message' => 'Reply content cannot be empty.']);
     }
 }
 ?>

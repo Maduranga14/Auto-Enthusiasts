@@ -334,6 +334,7 @@ if (isset($_GET['id'])){
                                     </button>
                                 </div>
                             </div>
+                        
                     </div>
                 </div>
             </div>
@@ -374,9 +375,7 @@ if (isset($_GET['id'])){
                                                 <i class="fas fa-thumbs-up me-1"></i>
                                                 <span class="vote-count">18</span>
                                             </button>
-                                            <button class="btn btn-sm btn-outline-secondary reply-btn me-2">
-                                                <i class="fas fa-reply me-1"></i>Reply
-                                            </button>
+                                            
                                         </div>
                                     </div>
                                 </div>';
@@ -388,11 +387,16 @@ if (isset($_GET['id'])){
                         <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-reply me-2"></i>Post a Reply</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body">                            
                             <form action="post_reply.php?id=<?php echo $thread_id; ?>" method="POST" id="newReplyForm">
                                 <div class="mb-3">
                                     <textarea class="form-control" name="content" rows="5" placeholder="Write your reply..."  required></textarea>
                                 </div>
+
+                                
+                                <div id="reply_error" class="alert alert-danger d-none mt-2"> </div>
+                                
+
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="formatting-toolbar">
                                         <button type="button" class="btn btn-sm btn-outline-secondary" title="Bold">
@@ -575,16 +579,23 @@ if (isset($_GET['id'])){
         document.getElementById('newReplyForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const form = this;
+            const errorDiv = document.getElementById('reply_error');
+            errorDiv.classList.add('d-none');
+
             let formData = new FormData(this);
             formData.append('thread_id', <?php echo json_encode($thread_id); ?>);
+
             fetch('post_reply.php', {
                 method: 'POST',
                 body: formData,
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                if (data.includes("Error")) {
-                    alert("There was an issue posing your reply:"+ data);
+                if (data.status !== 'success') {
+                    errorDiv.textContent = data.message;
+                    errorDiv.classList.remove('d-none');
+                    return;
                 } else {
                     const replyText = this.querySelector('textarea').value.trim();
                     if (replyText) {
@@ -607,9 +618,7 @@ if (isset($_GET['id'])){
                                         <i class="fas fa-thumbs-up me-1"></i>
                                         <span class="vote-count">0</span>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-secondary reply-btn me-2">
-                                        <i class="fas fa-reply me-1"></i>Reply
-                                    </button>
+                                    
                                 </div>
                             </div>
                         `;
@@ -631,10 +640,7 @@ if (isset($_GET['id'])){
                     
                             countElement.textContent = count;
                         });
-                        newReply.querySelector('.reply-btn').addEventListener('click', function() {
-                            document.getElementById('reply-form').scrollIntoView({ behavior: 'smooth' });
-                            document.querySelector('#reply-form textarea').focus();
-                        });
+                        
                          // Update reply count
                         const replyCountBadge = document.querySelector('.badge.bg-primary');
                         const currentCount = parseInt(replyCountBadge.textContent);
