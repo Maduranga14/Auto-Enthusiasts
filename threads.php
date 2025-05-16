@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'db.php';
 
 $category_id = isset($_GET['category']) ? (int)$_GET['category'] : 0;
@@ -30,7 +31,7 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #28a745;
+            --primary-color: #4361ee;
             --secondary-color: #f8f9fa;
             --accent-color: #ffc107;
             --text-dark: #343a40;
@@ -273,8 +274,8 @@ $result = $stmt->get_result();
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <i class="fas fa-car me-2"></i>AutoEnthusiasts
+            <a class="navbar-brand" href="index.php">
+                <i class="fas fa-car me-2"></i>Vehicle Forum
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -282,24 +283,29 @@ $result = $stmt->get_result();
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="categories.html"><i class="fas fa-list me-1"></i> Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-comments me-1"></i> Threads</a>
+                        <a class="nav-link" href="index.php"><i class="fas fa-home me-1"></i> Home</a>
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <div class="input-group me-3" style="max-width: 200px;">
-                        <input type="text" class="form-control form-control-sm" placeholder="Search...">
-                        <button class="btn btn-sm btn-outline-light" type="button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <a href="#" class="btn btn-outline-light me-2"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
-                    <a href="#" class="btn btn-light"><i class="fas fa-user-plus me-1"></i> Register</a>
+                     <?php if (isset($_SESSION['username'])): ?>
+                        <div id="userDropdown" class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2" style="font-size: 1.25rem;"></i>
+                                <span id="usernameDisplay"><?= htmlspecialchars($_SESSION['username']); ?></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="dropdownUser">
+                                <li><a class="dropdown-item" href="dashboard.php"><i class="fas fa-user-circle me-2"></i>Dashboard</a></li>
+                                <li><a class="dropdown-item" href="settings.php"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="logout.php" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                     <?php else: ?>
+                        <div id="guestButtons">
+                            <a href="login.html" class="btn btn-outline-light me-2">Login</a>
+                            <a href="register.html" class="btn btn-primary">Register</a>
+                        </div>
+                     <?php endif; ?>
                 </div>
             </div>
         </div>
