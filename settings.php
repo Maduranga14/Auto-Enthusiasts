@@ -140,7 +140,7 @@ $interests = explode(",", $user['interests']);
                             <span id="usernameDisplayNav"><?= htmlspecialchars($username) ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="dropdownUser">
-                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="dashboard.php"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
                             <li><a class="dropdown-item active" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="logout.php" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
