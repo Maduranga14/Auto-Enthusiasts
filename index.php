@@ -135,13 +135,14 @@ include 'db.php';
 
         .user-icon {
             font-size: 1.25rem;
-            color: white;
+            color: black;
             transition: all 0.2s;
         }
 
         .user-icon:hover {
             color: var(--primary-color);
         }
+        
     </style>
 </head>
 <body class="<?php echo isset ($_SESSION['username']) ? 'logged-in' : ''; ?>">
