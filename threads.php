@@ -382,10 +382,11 @@ $result = $stmt->get_result();
                             $created_at = date('M d, Y', strtotime($row['created_at']));
                             $views = (int)$row['view_count'];
                             $username = htmlspecialchars($row['username']);
+                            $userid = (int)$row['user_id'];
 
                             // Last reply info
                             $stmtlastreply = $conn->prepare("
-                                SELECT u.username, r.created_at
+                                SELECT u.username, r.created_at, u.id
                                 FROM replies r
                                 JOIN users u ON r.user_id = u.id
                                 WHERE r.thread_id = ?
@@ -394,12 +395,13 @@ $result = $stmt->get_result();
                             ");
                             $stmtlastreply->bind_param("i", $thread_id);
                             $stmtlastreply->execute();
-                            $stmtlastreply->bind_result($last_reply_user_raw, $last_reply_time_raw);
+                            $stmtlastreply->bind_result($last_reply_user_raw, $last_reply_time_raw, $last_reply_user_id_raw);
                             $stmtlastreply->fetch();
                             $stmtlastreply->close();
 
                             $last_reply_user = $last_reply_user_raw ? htmlspecialchars($last_reply_user_raw) : null;
                             $last_reply_time = $last_reply_time_raw ? date('M d, Y H:i', strtotime($last_reply_time_raw)) : null;
+                            $last_reply_user_id = $last_reply_user_id_raw ? intval($last_reply_user_id_raw) : null;
 
                             // Reply count
                             $stmtReplies = $conn->prepare("SELECT COUNT(*) FROM replies WHERE thread_id = ?");
@@ -421,12 +423,12 @@ $result = $stmt->get_result();
                                     
                                     <div class="thread-meta mb-2 text-muted small">
                                         Started by 
-                                        <a href="profile.php?user=<?= urlencode($username) ?>"> <?= $username ?> </a>    •  <?= $created_at ?>
+                                        <a href="user_profile.php?id=<?= urlencode($userid) ?>"> <?= $username ?> </a>    •  <?= $created_at ?>
 
                                         <?php if ($last_reply_user): ?>
                                         <span class="d-none d-md-inline">
                                             • Last reply:  
-                                            <a href="profile.php?user=<?= urlencode($last_reply_user) ?>"><?= $last_reply_user ?></a> 
+                                            <a href="user_profile.php?id=<?= urlencode($last_reply_user_id) ?>"><?= $last_reply_user ?></a> 
                                             <?= $last_reply_time ?>
                                         </span>
                                         <?php endif; ?>
