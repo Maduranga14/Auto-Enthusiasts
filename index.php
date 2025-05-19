@@ -293,7 +293,9 @@ include 'db.php';
                     $thredscount = $conn->query("SELECT COUNT(*) AS count FROM threads")->fetch_assoc()['count'];
                     $replycount = $conn->query("SELECT COUNT(*) AS count FROM replies")->fetch_assoc()['count'];
                     $memberscount = $conn->query("SELECT COUNT(*) AS count FROM users")->fetch_assoc()['count'];
-                    $newestuser = $conn->query("SELECT username FROM users ORDER BY created_at DESC LIMIT 1")->fetch_assoc()['username'];
+                    $newestuserresult = $conn->query("SELECT username FROM users ORDER BY created_at DESC LIMIT 1");
+                    $newestuserrow = $newestuserresult ? $newestuserresult->fetch_assoc() : null;
+                    $newestuser = $newestuserrow && isset($newestuserrow['username']) ? $newestuserrow['username'] : 'N/A';
                     ?>
                     <div class="card-header bg-info text-white">
                         <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i> Forum Stats</h5>
