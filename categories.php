@@ -23,95 +23,95 @@ session_start();
         }
 
 
-    body {
-        background-color: var(--light-bg);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .navbar {
-        background-color: var(--primary-color);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .navbar-brand {
-        font-weight: 700;
-        color: white !important;
-    }
-    
-    .nav-link {
-        color: rgba(255, 255, 255, 0.85) !important;
-        transition: all 0.3s;
-    }
-    
-    .nav-link:hover {
-        color: white !important;
-        transform: translateY(-2px);
-    }
-    
-    .category-card {
-        transition: all 0.3s ease;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 15px;
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-    
-    .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    .category-icon {
-        font-size: 1.5rem;
-        margin-right: 10px;
-        color: var(--primary-color);
-    }
-    
-    .search-box {
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        border: none;
-    }
-    
-    .search-btn {
-        border-radius: 8px;
-    }
-    
-    .sidebar-card {
-        border-radius: 10px;
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-    
-    .sidebar-title {
-        color: var(--primary-color);
-        font-weight: 600;
-    }
-    
-    .badge-custom {
-        background-color: var(--accent-color);
-        color: white;
-    }
-    
-    .latest-text {
-        color: var(--secondary-color);
-        font-weight: 500;
-    }
-    
-    footer {
-        background-color: var(--dark-bg);
-        color: white;
-        padding: 2rem 0;
-        margin-top: 3rem;
-    }
-    
-    @media (max-width: 768px) {
-        .sidebar {
-            margin-top: 2rem;
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-    }
-</style>
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .category-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .search-box {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+        
+        .search-btn {
+            border-radius: 8px;
+        }
+        
+        .sidebar-card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .badge-custom {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .latest-text {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+        
+        footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-top: 2rem;
+            }
+        }
+    </style>
 
 
 </head>
@@ -228,7 +228,9 @@ session_start();
                             $totalcategories = $conn->query("SELECT COUNT(*) AS total FROM categories")->fetch_assoc()['total'];
                             $totalthreads = $conn->query("SELECT COUNT(*) AS total FROM threads")->fetch_assoc()['total'];
                             $totalmembers = $conn->query("SELECT COUNT(*) AS total FROM users")->fetch_assoc()['total'];
-                            $newestmember = $conn->query("SELECT username FROM users ORDER BY id DESC LIMIT 1")->fetch_assoc()['username'];
+                            $newestuserresult = $conn->query("SELECT username FROM users ORDER BY created_at DESC LIMIT 1");
+                            $newestuserrow = $newestuserresult ? $newestuserresult->fetch_assoc() : null;
+                            $newestuser = $newestuserrow && isset($newestuserrow['username']) ? $newestuserrow['username'] : 'N/A';
                             echo '
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Total Categories
@@ -244,7 +246,7 @@ session_start();
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Newest Member
-                                <span class="badge badge-custom rounded-pill">'. htmlspecialchars($newestmember) .'</span>
+                                <span class="badge badge-custom rounded-pill">'. htmlspecialchars($newestuser) .'</span>
                             </li>';
 
                             $conn->close();
