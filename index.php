@@ -281,7 +281,7 @@ include 'db.php';
                                     </li>
                                 <?php endwhile; ?>
                             <?php else: ?>
-                                <li class="list-group-item">NO Recent threads found.</li>
+                                <li class="list-group-item">No Recent Threads Found.</li>
                             <?php endif; ?>
                         </ul>
                     </div>

@@ -2,11 +2,13 @@
 
 session_start();
 require 'db.php';
+header('Content-Type: application/json');
 
 
 
 if (!isset($_SESSION['user_id'])) {
-    die('you must be logged in to post a thread.');
+    echo json_encode(["success" => false, "error" => "You must be logged in to post a thread."]);
+    exit;
 
 }
 
@@ -23,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $check->store_result();
 
     if ($check->num_rows === 0) {
-        die("Selected category does not exist.");
+        echo json_encode(["success" => false, "error" => "Selected category does not exit."]);
+        exit;
     }
 
     $sql = "INSERT INTO threads (user_id, title , content, tags, category_id, created_at) VALUES (?,?,?,?,?, NOW())";
@@ -46,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode(["success" => true]);
         
     }else {
-        echo json_encode(["success" => false, "error" => "Failed to insert data"]);
+        echo json_encode(["success" => false, "error" => "Failed to insert thread."]);
     }
     $stmt->close();
     exit;

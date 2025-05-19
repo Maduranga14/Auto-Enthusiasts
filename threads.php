@@ -589,7 +589,7 @@ $result = $stmt->get_result();
                     <div class="card-body">
                         <?php foreach ($top_users as $user): ?>
                         <div class="d-flex align-items-center mb-3">
-                            <img src="<?=htmlspecialchars($user['avatar']) ?>" class="rounded-circle me-3" width="40" height="40" alt="Avatar of <?= htmlspecialchars($user['username']) ?>">
+                            <i class="fas fa-user-circle fa-2x me-3"></i>
                             <div>
                                 <a href="user_profile.php?id=<?= $user['id'] ?>" class="text-decoration-none"><?= htmlspecialchars($user['username']) ?></a>
                                 <div class="small text-muted"><?= number_format($user['post_count']) ?> posts</div>
@@ -625,6 +625,9 @@ $result = $stmt->get_result();
                             <input type="text" class="form-control" id="threadTags" name="tags" placeholder="e.g., electric, sedan, 2025">
                             <div class="form-text">Add up to 5 tags to help others find your thread</div>
                         </div>
+                        <div id="threadFormError" class="alert alert-danger d-none" role="alert">
+
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary btn-cancel" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" form="newThreadForm" class="btn btn-primary btn-post">
@@ -641,6 +644,7 @@ $result = $stmt->get_result();
         document.addEventListener('DOMContentLoaded', function() {
             // New thread form submission
             const newThreadForm = document.getElementById('newThreadForm');
+            const errBox = document.getElementById('threadFormError');
             
             newThreadForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -654,6 +658,9 @@ $result = $stmt->get_result();
                     formData.append('category_id', category_id);
                     
                 }
+
+                errBox.classList.add('d-none');
+                errBox.textContent = '';
 
                 // Show loading state
                 submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Posting...';
@@ -676,20 +683,22 @@ $result = $stmt->get_result();
                             newThreadForm.reset();
                             submitButton.innerHTML = originalButtonText;
                             submitButton.disabled = false;
-
-                            alert('Your thread has been posted successfully!');
                         },1000);
                     } else {
                         submitButton.innerHTML = originalButtonText;
                         submitButton.disabled = false;
-                        alert('Error posting thread: '+(data.error || 'Unknown error'));
+                        
+                        errBox.textContent = data.error || 'An unknown error occurred while posting the thread.';
+                        errBox.classList.remove('d-none');
                     }
                 })
                 .catch(error => {
                     console.error('Error: ', error);
                     submitButton.innerHTML = originalButtonText;
                     submitButton.disabled = false;
-                    alert('something went wrong')
+                    
+                    errBox.textContent = 'A network or server error occurred.';
+                    errBox.classList.remove('d-none');
                 });
             });
     

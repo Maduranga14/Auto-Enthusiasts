@@ -375,7 +375,7 @@ if (isset($_GET['id'])){
                                 <div class="post-actions">
                                     <button class="btn btn-sm btn-outline-primary like-btn me-2">
                                         <i class="fas fa-thumbs-up me-1"></i>
-                                        <span class="vote-count">24</span>
+                                        <span class="vote-count">0</span>
                                     </button>
                                     <button class="btn btn-sm btn-outline-secondary reply-btn me-2">
                                         <i class="fas fa-reply me-1"></i>Reply
@@ -424,7 +424,7 @@ if (isset($_GET['id'])){
                                         <div class="post-actions">
                                             <button class="btn btn-sm btn-outline-primary like-btn me-2">
                                                 <i class="fas fa-thumbs-up me-1"></i>
-                                                <span class="vote-count">18</span>
+                                                <span class="vote-count">0</span>
                                             </button>
                                             
                                         </div>
