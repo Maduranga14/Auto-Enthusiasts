@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2025 at 07:01 PM
+-- Generation Time: May 19, 2025 at 12:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,11 +41,11 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`category_id`, `name`, `description`, `icon`, `threads_count`, `latest_thread_title`) VALUES
-(1, 'Cars', 'Discussion about all types of cars - sedans, coupes, hatchbacks, and sports cars.', 'fa-car', 5, 'DIY oil change tips'),
+(1, 'Cars', 'Discussion about all types of cars - sedans, coupes, hatchbacks, and sports cars.', 'fa-car', 0, ''),
 (2, 'Motorcycles', 'Everything about motorcycles - cruisers, sport bikes, touring, and more.', 'fa-motorcycle', 0, ''),
 (3, 'Trucks & SUVs', 'Pickup trucks, SUVs, off-roading, and overlanding discussions.', 'fa-truck-pickup', 0, ''),
-(4, 'Classic Vehicles', 'Vintage, classic, and antique vehicle restoration and appreciation.', 'fa-history', 2, 'Best Classic Cars for Beginners?'),
-(5, 'Electric Vehicles', 'EV technology, charging infrastructure, and future developments.', 'fa-charging-station', 1, 'Are Electric Cars Really the Future of Daily Driving?'),
+(4, 'Classic Vehicles', 'Vintage, classic, and antique vehicle restoration and appreciation.', 'fa-history', 0, ''),
+(5, 'Electric Vehicles', 'EV technology, charging infrastructure, and future developments.', 'fa-charging-station', 0, ''),
 (6, 'Ship', 'disscussion about ships/boats.', 'fa-ship', 0, '');
 
 -- --------------------------------------------------------

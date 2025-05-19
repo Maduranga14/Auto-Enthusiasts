@@ -4,9 +4,6 @@ include 'db.php';
 
 $category_id = isset($_GET['category']) ? (int)$_GET['category'] : 0;
 
-
-
-
 $sql = "SELECT threads.*, users.username
     FROM threads 
     JOIN users ON threads.user_id = users.id
@@ -38,7 +35,6 @@ $result = $stmt->get_result();
             --text-light: #6c757d;
             --border-color: #e9ecef;
         }
-
 
         body {
             background-color: #f8f9fa;
@@ -133,7 +129,6 @@ $result = $stmt->get_result();
             background-color: white;
             border-bottom: 1px solid var(--border-color);
         }
-        
         
         .thread-item:hover {
             transform: translateX(5px);
@@ -256,6 +251,16 @@ $result = $stmt->get_result();
             padding: 2rem;
         }
         
+        /* No threads message */
+        .no-threads {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .thread-stats {
@@ -268,8 +273,6 @@ $result = $stmt->get_result();
             }
         }
     </style>
-
-
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
@@ -441,13 +444,11 @@ $result = $stmt->get_result();
                     <?php
                         }
                     } else {
-                        echo '<p>No threads available.</p>';
+                        echo '<div class="no-threads"><p>No threads available.</p></div>';
                     }
                     ?>
                 </div>
 
-
-            
                 <!-- Pagination -->
                 <nav aria-label="Thread pagination">
                     <ul class="pagination justify-content-center">
@@ -466,11 +467,9 @@ $result = $stmt->get_result();
                         </li>
                     </ul>
                 </nav>
-            
             </div>
         
             <!-- Sidebar -->
-            
             <div class="col-lg-4">
                 <!--Category info-->
                 <div class="card mb-4">
@@ -600,7 +599,6 @@ $result = $stmt->get_result();
                     </div>
                 </div>
             </div>
-        
         </div>
     </main>
 
@@ -635,11 +633,9 @@ $result = $stmt->get_result();
                         </div>
                     </form>
                 </div>
-                
             </div>
         </div>
     </div>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -717,7 +713,5 @@ $result = $stmt->get_result();
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
 </html>
