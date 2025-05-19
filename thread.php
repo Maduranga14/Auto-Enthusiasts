@@ -12,9 +12,10 @@ if (isset($_GET['id'])){
         $stmt->close();
     }
 
-    $sql = "SELECT t.title, t.content, u.username, u.avatar, t.tags, t.view_count, t.created_at 
+    $sql = "SELECT t.title, t.content, u.username, u.id AS user_id, t.tags, t.view_count, t.created_at, c.name AS category_name, t.category_id
             FROM threads t
             JOIN users u ON t.user_id = u.id
+            JOIN categories c ON t.category_id = c.category_id
             WHERE t.id = ?";
     
     if ($stmt = $conn->prepare($sql)) {
@@ -23,7 +24,7 @@ if (isset($_GET['id'])){
         $stmt->store_result();
 
         if ($stmt-> num_rows > 0){
-            $stmt->bind_result($title, $content, $username, $avatar, $tags, $view_count, $created_at);
+            $stmt->bind_result($title, $content, $username, $creatorid, $tags, $view_count, $created_at, $category_name, $categoryid);
             $stmt->fetch();
         } else {
             echo "thread not found!";
@@ -134,11 +135,6 @@ if (isset($_GET['id'])){
         .reply-avatar {
             width: 50px;
             height: 50px;
-        }
-    
-        .nested-reply-avatar {
-            width: 40px;
-            height: 40px;
         }
         
         .post-content {
@@ -324,8 +320,8 @@ if (isset($_GET['id'])){
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.php"><i class="fas fa-home me-1"></i>Home</a></li>
                         <li class="breadcrumb-item"><a href="categories.php"><i class="fas fa-list me-1"></i>Categories</a></li>
-                        <li class="breadcrumb-item"><a href="threads.php?category=cars"><i class="fas fa-car me-1"></i>Cars</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Best electric cars 2025</li>
+                        <li class="breadcrumb-item"><a href="threads.php?category=<?= $categoryid ?>"><i class="fas fa-car me-1"></i><?= htmlspecialchars($category_name); ?></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($title); ?></li>
                     </ol>
                 </nav>
 
@@ -361,12 +357,12 @@ if (isset($_GET['id'])){
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
-                                <img src="uploads/avatars/<?php echo htmlspecialchars($avatar); ?>" class="user-avatar rounded-circle" alt="EVFan's avatar">
+                                <i class="fas fa-user-circle fa-2x me-3"></i> 
                             </div>
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <a href="#" class="user-name text-decoration-none"><?php echo htmlspecialchars($username); ?></a>
-                                    <small class="post-time" title="Posted on June 12, 2025 at 3:45 PM"><i class="far fa-clock me-1"></i><?php echo date('M d, Y', strtotime($created_at)); ?></small>
+                                    <a href="user_profile.php?id=<?= $creatorid ?>" class="user-name text-decoration-none"><?php echo htmlspecialchars($username); ?></a>
+                                    <small class="post-time" title="Posted on"><i class="far fa-clock me-1"></i><?php echo date('M d, Y', strtotime($created_at)); ?></small>
                                 </div>
                                 <div class="post-content mb-3">
                                     <p><?php echo nl2br(htmlspecialchars($content)); ?></p>
@@ -398,7 +394,7 @@ if (isset($_GET['id'])){
                 <div class="card-body">
                     <!-- Reply -->
                      <?php
-                     $reply_sql = "SELECT r.id, r.content, r.created_at, u.username, u.avatar
+                     $reply_sql = "SELECT r.id, r.content, r.created_at, u.username,r.user_id
                                    FROM replies r
                                    JOIN users u ON r.user_id = u.id
                                    WHERE r.thread_id = ?
@@ -411,11 +407,11 @@ if (isset($_GET['id'])){
                         while($reply = $reply_result->fetch_assoc()) {
                             echo '<div class="d-flex mb-4" id="reply-' . $reply['id'] . '">
                                     <div class="flex-shrink-0 me-3">
-                                        <img src="uploads/avatars/' . htmlspecialchars($reply['avatar']) . '" class="reply-avatar rounded-circle" alt="' . htmlspecialchars($reply['username']) . '\'s avatar">
+                                        <i class="fas fa-user-circle fa-2x me-3"></i>
                                     </div>
                                     <div class="flex-grow-1">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <a href="#" class="user-name text-decoration-none">' .htmlspecialchars($reply['username']) . '</a>
+                                            <a href="user_profile.php?id=' . urlencode($reply['user_id']) . '" class="user-name text-decoration-none">' .htmlspecialchars($reply['username']) . '</a>
                                             <small class="post-time" title="' .date('M d, Y h:i A', strtotime($reply['created_at'])) .'"><i class="far fa-clock me-1"></i>' .date('M d, Y', strtotime($reply['created_at'])) . '</small>
                                         </div>
                                         <div class="post-content mb-3">
@@ -500,7 +496,7 @@ if (isset($_GET['id'])){
                         ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="fas fa-user me-2"></i>Started by</span>
-                            <a href="#" class="text-decoration-none"><?php echo htmlspecialchars($username); ?></a>
+                            <a href="user_profile.php?id=<?= $creatorid ?>" class="text-decoration-none"><?php echo htmlspecialchars($username); ?></a>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="fas fa-calendar me-2"></i>Created</span>
@@ -532,15 +528,15 @@ if (isset($_GET['id'])){
                 <div class="card-body">
                     
                     <div class="d-flex align-items-center mb-3">
-                        <img src="images/avatar1.jpg" class="rounded-circle me-3" width="40" height="40" alt="EVFan">
+                        <i class="fas fa-user-circle fa-2x me-3"></i>
                         <div>
-                            <a href="#" class="text-decoration-none"><?php echo htmlspecialchars($username); ?></a>
+                            <a href="user_profile.php?id=<?= $creatorid ?>" class="text-decoration-none"><?php echo htmlspecialchars($username); ?></a>
                             <div class="small text-muted">Thread starter</div>
                         </div>
                     </div>
                     <?php
 
-                    $repliers = "SELECT u.username, u.avatar, COUNT(r.id) AS reply_count
+                    $repliers = "SELECT u.username, u.id, COUNT(r.id) AS reply_count
                                  FROM replies r
                                  JOIN users u ON r.user_id = u.id
                                  Where r.thread_id = ?
@@ -555,9 +551,9 @@ if (isset($_GET['id'])){
                     <?php if ($repliers_result->num_rows > 0): ?>
                         <?php while ($row = $repliers_result->fetch_assoc()): ?>
                             <div class="d-flex align-items-center mb-3">
-                                <img src="images/<?= htmlspecialchars($row['avatar']) ?>" class="rounded-circle me-3" width="40" height="40" alt="<?= htmlspecialchars($row['username']) ?>">
+                                <i class="fas fa-user-circle fa-2x me-3"></i>
                                 <div>
-                                    <a href="#" class="text-decoration-none"><?= htmlspecialchars($row['username']) ?></a>
+                                    <a href="user_profile.php?id=<?= $row['id'] ?>" class="text-decoration-none"><?= htmlspecialchars($row['username']) ?></a>
                                     <div class="small text-muted">
                                         <?= $row['reply_count'] ?> <?= $row['reply_count'] == 1 ? 'reply' : 'replies' ?>
                                     </div>
@@ -654,7 +650,7 @@ if (isset($_GET['id'])){
                         newReply.className = 'd-flex mb-4 new-reply';
                         newReply.innerHTML = `
                             <div class="flex-shrink-0 me-3">
-                            <img src="images/avatar5.jpg" class="reply-avatar rounded-circle" alt="Your avatar">
+                            <i class="fas fa-user-circle fa-2x me-3"></i>
                             </div>
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-2">

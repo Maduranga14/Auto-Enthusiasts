@@ -574,7 +574,7 @@ $result = $stmt->get_result();
                 <div class="card">
                     <?php
                     $stmtcontributors = $conn->prepare("
-                        SELECT u.id, u.username, u.avatar, COUNT(t.id) as post_count
+                        SELECT u.id, u.username, COUNT(t.id) as post_count
                         FROM users u
                         LEFT JOIN threads t ON t.user_id = u.id
                         GROUP BY u.id
