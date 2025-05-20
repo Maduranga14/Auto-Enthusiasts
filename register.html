@@ -222,6 +222,8 @@
                                 </label>
                                 <div class="invalid-feedback">You must agree to the terms</div>
                             </div>
+
+                            <div id="formError" class="alert alert-danger d-none" role="alert"></div>
                             
                             <button type="submit" class="btn btn-success w-100 mt-4 form-group">
                                 <i class="fas fa-user-plus me-2"></i>Create Account
@@ -284,7 +286,7 @@
                     <i class="fas fa-check-circle text-success mb-3" style="font-size: 3rem;"></i>
                     <h4>Welcome to AutoEnthusiasts!</h4>
                     <p class="mb-4">Your account has been created successfully. We've sent a confirmation email to <strong id="registeredEmail"></strong>.</p>
-                    <button type="button" class="btn btn-success w-100" id="loginBtn">LOGIN Your Account</button></a>
+                    <button type="button" class="btn btn-success w-100" id="loginBtn">LOGIN Your Account</button>
                 </div>
             </div>
         </div>
@@ -385,75 +387,95 @@
                 });
             });
             
-            // Terms modal checkbox
+            // Terms modal checkbox and acceptance
             const modalTermsCheck = document.getElementById('modalTermsCheck');
             const acceptTermsBtn = document.getElementById('acceptTermsBtn');
+            const termsCheck = document.getElementById('termsCheck');
+            const form = document.getElementById('registerForm');
             
             modalTermsCheck.addEventListener('change', function() {
                 acceptTermsBtn.disabled = !this.checked;
             });
             
             acceptTermsBtn.addEventListener('click', function() {
-                document.getElementById('termsCheck').checked = true;
+                termsCheck.checked = true;
+                termsCheck.dispatchEvent(new Event('change'));
                 const modal = bootstrap.Modal.getInstance(document.getElementById('termsModal'));
                 modal.hide();
+                form.classList.add('was-validated');
+            });
+            
+            // Main terms checkbox validation
+            termsCheck.addEventListener('change', function() {
+                if (this.checked) {
+                    this.setCustomValidity('');
+                } else {
+                    this.setCustomValidity('You must agree to the terms');
+                }
             });
             
             // Form validation
-            const form = document.getElementById('registerForm');
-            
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
                 event.stopPropagation();
                 
-                // Manually validate interests
+                // Manually validate all required fields
                 if (selectedInterests.length === 0) {
                     selectedInterestsInput.setCustomValidity('Please select at least one interest');
                 } else {
                     selectedInterestsInput.setCustomValidity('');
                 }
                 
+                if (!termsCheck.checked) {
+                    termsCheck.setCustomValidity('You must agree to the terms');
+                } else {
+                    termsCheck.setCustomValidity('');
+                }
+                
                 if (form.checkValidity()) {
                     const formData = new FormData(form);
-
-                    fetch('register.php',{
+                    const errorDiv =document.getElementById('formError');
+                    fetch('register.php', {
                         method: 'POST',
-                        body:formData
+                        body: formData
                     })
-                    .then(response => response.text())
+                    .then(response => response.json())
                     .then(data => {
-                        if (data.includes('successful')) {
+                        
+                        if (data.success) {
                             document.getElementById('registeredEmail').textContent = document.getElementById('email').value;
-                            const successModalE1 = document.getElementById('successModal');
-                            const successModal = new bootstrap.Modal(successModalE1);
+                            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                             successModal.show();
                             form.reset();
                             form.classList.remove('was-validated');
-                        }else {
-                            alert('registeration failed' + data);
+                            errorDiv.classList.add('d-none');
+                        } else if (data.error) {
+                            errorDiv.textContent = 'Registration failed: ' + data.error;
+                            errorDiv.classList.remove('d-none');
+                        } else {
+                            errorDiv.textContent = 'Unknown response from server.';
+                            errorDiv.classList.remove('d-none');
                         }
                     })
                     .catch(error => {
-                        alert('Error: '+ error);
-                    }
-                    );
-                   
+                        alert('Error: ' + error);
+                    });
                 }
                 
                 form.classList.add('was-validated');
             }, false);
+            
+            // Login button handler
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                window.location.href = 'login.html';
+            });
             
             // Add animation delay to form groups
             const formGroups = document.querySelectorAll('.form-group');
             formGroups.forEach((group, index) => {
                 group.style.animationDelay = `${0.1 + (index * 0.1)}s`;
             });
-            document.getElementById('loginBtn').addEventListener('click', function () {
-                window.location.href= 'login.html'
-            });
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

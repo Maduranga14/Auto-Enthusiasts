@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2025 at 12:40 PM
+-- Generation Time: May 20, 2025 at 06:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,22 +45,7 @@ INSERT INTO `categories` (`category_id`, `name`, `description`, `icon`, `threads
 (2, 'Motorcycles', 'Everything about motorcycles - cruisers, sport bikes, touring, and more.', 'fa-motorcycle', 0, ''),
 (3, 'Trucks & SUVs', 'Pickup trucks, SUVs, off-roading, and overlanding discussions.', 'fa-truck-pickup', 0, ''),
 (4, 'Classic Vehicles', 'Vintage, classic, and antique vehicle restoration and appreciation.', 'fa-history', 0, ''),
-(5, 'Electric Vehicles', 'EV technology, charging infrastructure, and future developments.', 'fa-charging-station', 0, ''),
-(6, 'Ship', 'disscussion about ships/boats.', 'fa-ship', 0, '');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `posts`
---
-
-CREATE TABLE `posts` (
-  `id` int(11) NOT NULL,
-  `thread_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `content` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(5, 'Electric Vehicles', 'EV technology, charging infrastructure, and future developments.', 'fa-charging-station', 0, '');
 
 -- --------------------------------------------------------
 
@@ -124,14 +109,6 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- Indexes for table `posts`
---
-ALTER TABLE `posts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `thread_id` (`thread_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
 -- Indexes for table `replies`
 --
 ALTER TABLE `replies`
@@ -166,12 +143,6 @@ ALTER TABLE `categories`
   MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `posts`
---
-ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `replies`
 --
 ALTER TABLE `replies`
@@ -192,13 +163,6 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `posts`
---
-ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`thread_id`) REFERENCES `threads` (`id`),
-  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `replies`
