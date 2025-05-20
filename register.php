@@ -18,6 +18,7 @@ $checkUsername->bind_param("s", $username);
 $checkUsername->execute();
 $checkUsername->store_result();
 
+
 if ($checkUsername->num_rows > 0) {
     echo json_encode(['error' => 'Username already exists']);
     $checkUsername->close();
