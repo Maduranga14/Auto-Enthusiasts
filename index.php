@@ -345,7 +345,7 @@ include 'db.php';
                     <ul class="list-unstyled footer-links">
                         <li class="mb-2"><a href="index.php" class="text-white">Home</a></li>
                         <li class="mb-2"><a href="categories.php" class="text-white">Categories</a></li>    
-                        <li><a href="members.html" class="text-white">Members</a></li>
+                        
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
