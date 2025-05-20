@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once 'db.php'; // Make sure db.php defines $conn or $pdo
+require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['loginEmail']) && isset($_POST['password'])) {
         $email = trim($_POST['loginEmail']);
         $password = $_POST['password'];
 
-        // Prepare and execute SQL query securely
+        
         $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->bind_param('s', $email);
         $stmt->execute();
