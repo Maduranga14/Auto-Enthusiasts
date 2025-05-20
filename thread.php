@@ -394,6 +394,13 @@ if (isset($_GET['id'])){
                 <div class="card-body">
                     <!-- Reply -->
                      <?php
+                     function parseSimpleMarkdown($text) {
+                        $text = htmlspecialchars($text);
+                        $text = nl2br($text);
+                        $text = preg_replace('/\*\*(.*?)\*\*/s', '<strong>$1</strong>', $text);
+                        $text = preg_replace('/\*(.*?)\*/s', '<em>$1</em>', $text);
+                        return $text;
+                     }
                      $reply_sql = "SELECT r.id, r.content, r.created_at, u.username,r.user_id
                                    FROM replies r
                                    JOIN users u ON r.user_id = u.id
@@ -415,7 +422,7 @@ if (isset($_GET['id'])){
                                             <small class="post-time" title="' .date('M d, Y h:i A', strtotime($reply['created_at'])) .'"><i class="far fa-clock me-1"></i>' .date('M d, Y', strtotime($reply['created_at'])) . '</small>
                                         </div>
                                         <div class="post-content mb-3">
-                                            <p>' . nl2br(htmlspecialchars($reply['content'])) . '</p>
+                                            <p>' . parseSimpleMarkdown($reply['content']) . '</p>
                                       </div>
                                         <div class="post-actions">
                                             <button class="btn btn-sm btn-outline-primary like-btn me-2">
@@ -437,7 +444,7 @@ if (isset($_GET['id'])){
                         <div class="card-body">                            
                             <form action="post_reply.php?id=<?php echo $thread_id; ?>" method="POST" id="newReplyForm">
                                 <div class="mb-3">
-                                    <textarea class="form-control" name="content" rows="5" placeholder="Write your reply..."  required></textarea>
+                                    <textarea class="form-control" name="content" rows="5" id="replyTextarea" placeholder="Write your reply..."  required></textarea>
                                 </div>
 
                                 
@@ -446,21 +453,13 @@ if (isset($_GET['id'])){
 
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="formatting-toolbar">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Bold">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Bold" onclick="formatText('bold')">
                                             <i class="fas fa-bold"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Italic">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Italic" onclick="formatText('italic')">
                                             <i class="fas fa-italic"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Link">
-                                            <i class="fas fa-link"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Image">
-                                            <i class="fas fa-image"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Code">
-                                            <i class="fas fa-code"></i>
-                                        </button>
+                                        
                                     </div>
                                     <button type="submit" class="btn btn-primary px-4">
                                         <i class="fas fa-paper-plane me-2"></i>Post Reply
@@ -577,6 +576,39 @@ if (isset($_GET['id'])){
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+    function formatText(format) {
+        const textarea = document.getElementById('replyTextarea');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+        let before, after;
+            
+        switch(format) {
+            case 'bold':
+                before = after = '**';
+                break;
+            case 'italic':
+                before = after = '*';
+                break;
+            default:
+                before = after = '';
+        }
+            
+        const newText = textarea.value.substring(0, start) + before + selectedText + after + textarea.value.substring(end);
+        textarea.value = newText;
+            
+        // Restore cursor position
+        if (selectedText.length > 0) {
+            textarea.selectionStart = start + before.length;
+            textarea.selectionEnd = end + before.length;
+        } else {
+            textarea.selectionStart = textarea.selectionEnd = start + before.length;
+        }
+            
+        textarea.focus();
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         // Like button functionality
         document.querySelectorAll('.like-btn').forEach(button => {
@@ -646,6 +678,12 @@ if (isset($_GET['id'])){
                 } else {
                     const replyText = this.querySelector('textarea').value.trim();
                     if (replyText) {
+
+                        const formattedText = replyText
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                            .replace(/\n/g, '<br>');
+
                         const newReply = document.createElement('div');
                         newReply.className = 'd-flex mb-4 new-reply';
                         newReply.innerHTML = `
@@ -658,7 +696,7 @@ if (isset($_GET['id'])){
                                     <small class="post-time"><i class="far fa-clock me-1"></i>Just now</small>
                                 </div>
                                 <div class="post-content mb-3">
-                                    <p>${replyText}</p>
+                                    <p>${formattedText}</p>
                                 </div>
                                 <div class="post-actions">
                                     <button class="btn btn-sm btn-outline-primary like-btn me-2">
