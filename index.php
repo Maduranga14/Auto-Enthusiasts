@@ -375,12 +375,6 @@ include 'db.php';
                 <div class="col-md-6 text-center text-md-start">
                     <small>&copy; 2025 AutoEnthusiasts. All rights reserved.</small>
                 </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <small>
-                        <a href="terms.html" class="text-white me-3">Terms</a>
-                        <a href="privacy.html" class="text-white">Privacy</a>
-                    </small>
-                </div>
             </div>
         </div>
     </footer>
